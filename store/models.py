@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User 
+from django.urls import reverse
 
 # Create your models here.
 class Category(models.Model):
@@ -8,6 +9,9 @@ class Category(models.Model):
 
     class Meta:
         verbose_name_plural = 'categories'
+    
+    def get_absolute_url(self):
+        return reverse('store:category' , args=[self.slug])
 
     def __str__(self):
         return self.name
@@ -23,10 +27,15 @@ class Product(models.Model):
     in_stock = models.BooleanField(default=True)
     created = models.DateTimeField(auto_now_add=True)
     update = models.DateTimeField(auto_now=True)
+    author = models.CharField(max_length=30)
+    available= models.BooleanField(default=True) 
 
     class Meta:
         verbose_name_plural = 'Product'
         ordering = ('-created', ) 
 
+    def get_absolute_url(self):
+        return reverse('store:detail' , args=[self.slug])
+    
     def __str__(self):
         return self.title
